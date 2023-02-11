@@ -14,11 +14,11 @@ app.unsubscribe(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Routes
-app.use(router);
+app.use("/", router);
 
-app.get("/", async (req, res) =>{
-    res.send("i can get maybe")
-})
+// app.get('/', (req, res)=>{
+//     res.send("no problem, hello world")
+// })
 
 // Listen
 app.listen(3001, () => console.log("Server started on port 3001"));

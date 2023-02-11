@@ -1,6 +1,7 @@
+const shortid = require("shortid");
 const Redirect = require("../models/redirect.model");
 
-const generate = async (req, res) => {
+const postUrl = async (req, res) => {
   const { url } = req.body;
 
   if (!url) {
@@ -8,7 +9,10 @@ const generate = async (req, res) => {
   }
 
   try {
-    const redirect = await Redirect.create({ url });
+    const redirect = await Redirect.create({
+      url: url,
+      shortUrl: shortid(),
+    });
     res.status(201).json(redirect);
   } catch (error) {
     console.log(error);
@@ -16,34 +20,31 @@ const generate = async (req, res) => {
   }
 };
 
-const redirect = async (req, res) => {
-  const { shortUrl } = req.body;
-
+const getUrl = async (req, res) => {
   try {
-    // const redirect = await Redirect.findById(id);
-    const redirect = await Redirect.findOne({shortUrl}).lean()
-
+    const { id } = req.params;
+    const redirect = await Redirect.findOne({ shortUrl: id });
+    console.log(redirect);
     if (!redirect) {
       return res.status(404).send("short url chimn bolku bnoo");
     }
-
     const { url } = redirect;
 
-    res.send(url);
+    // res.send({ redirect });
+    res.redirect(url)
   } catch (error) {
     res.status(500).send("Error, try again(error)");
   }
 };
-const getAll = async (req, res)=>{
-try {
-  console.log(req)
-  const result = await Redirect.find({})
-  res.send({
-    result
-  })
-} catch (error) {
-  console.log(error)
-}
-}
+const getAll = async (req, res) => {
+  try {
+    const result = await Redirect.find({});
+    res.send({
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-module.exports = { generate, redirect, getAll };
+module.exports = { postUrl, getUrl, getAll };

@@ -1,16 +1,14 @@
 const { Schema, model } = require("mongoose");
-const shortid = require("shortid");
 
+// const shortid = require("shortid");
 const redirectSchema = new Schema({
   url: {
     type: String,
     required: true,
   },
-  shortUrl:{
-    type:String,
-    required:true,
-    default:()=>shortid.generate()
-  }
+  shortUrl: {
+    type: String,
+  },
 });
 
 const Redirect = model("Redirect", redirectSchema);
