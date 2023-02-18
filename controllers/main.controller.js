@@ -23,7 +23,7 @@ const postUrl = async (req, res) => {
 const getUrl = async (req, res) => {
   try {
     const { id } = req.params;
-    const redirect = await Redirect.findOne({ shortUrl: id });
+    const redirect = await Redirect.findOne({ shortUrl: id })
     console.log(redirect);
     if (!redirect) {
       return res.status(404).send("short url chimn bolku bnoo");
@@ -47,4 +47,10 @@ const getAll = async (req, res) => {
   }
 };
 
-module.exports = { postUrl, getUrl, getAll };
+const deleteUrl = async (req, res) => {
+  const id = req.params.id
+  const result = await Redirect.findByIdAndDelete({_id:id});
+  res.send(result);
+};
+
+module.exports = { postUrl, getUrl, getAll, deleteUrl };
